@@ -1,14 +1,13 @@
 import { Heading } from '@chakra-ui/react';
-import React from 'react';
 
 import Layout from '@/components/Layout';
 
 const NoMatch = () => {
-	return (
-		<Layout>
-			<Heading as={'h2'}>Nothing to see here!</Heading>
-		</Layout>
-	);
+  return (
+    <Layout>
+      <Heading as={'h2'}>Nothing to see here!</Heading>
+    </Layout>
+  );
 };
 
 export default NoMatch;
