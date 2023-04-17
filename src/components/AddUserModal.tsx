@@ -1,3 +1,8 @@
+import * as React from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+
 import { AddIcon } from '@chakra-ui/icons';
 import {
   Button,
@@ -18,10 +23,6 @@ import {
   chakra,
   useDisclosure,
 } from '@chakra-ui/react';
-import * as React from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 const ChakraPoweredDatePicker = chakra(DatePicker);
 
@@ -43,7 +44,7 @@ const AddUserModal = () => {
 
   const { ref, ...rest } = register('name', { required: true });
 
-  const onSubmit: SubmitHandler<AddUserFormValues> = data => {
+  const onSubmit: SubmitHandler<AddUserFormValues> = (data) => {
     console.log(data);
     onClose();
     reset();
@@ -81,7 +82,7 @@ const AddUserModal = () => {
                 id="name"
                 type="text"
                 {...rest}
-                ref={e => {
+                ref={(e) => {
                   ref(e);
                   initialRef.current = e;
                 }}

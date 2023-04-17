@@ -3,6 +3,7 @@ import { Box, Flex, Heading } from '@chakra-ui/react';
 import AddUserModal from '@/components/AddUserModal';
 import DashboardLayout from '@/components/DashboardLayout';
 import UserTable from '@/components/UserTable';
+
 import { User } from '@/types';
 
 const users: User[] = [

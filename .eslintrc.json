@@ -6,11 +6,12 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:react/jsx-runtime",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:prettier/recommended",
-    "plugin:import/recommended"
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -22,7 +23,13 @@
     "tsconfigRootDir": ".",
     "project": ["./tsconfig.json"]
   },
-  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "react-hooks",
+    "import",
+    "prettier"
+  ],
   "settings": {
     "import/resolver": {
       "typescript": {
@@ -34,6 +41,9 @@
     }
   },
   "rules": {
+    "prettier/prettier": "error",
+    "react/react-in-jsx-scope": "off",
+    "import/no-unresolved": [2, { "ignore": ["/public"] }],
     "linebreak-style": "off",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-misused-promises": "off",

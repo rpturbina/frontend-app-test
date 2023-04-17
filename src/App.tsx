@@ -1,5 +1,6 @@
-import { Box } from '@chakra-ui/react';
 import { Route, Routes } from 'react-router-dom';
+
+import { Box } from '@chakra-ui/react';
 
 import DashboardPage from '@/pages/DashboardPage';
 import NoMatch from '@/pages/NoMatch';

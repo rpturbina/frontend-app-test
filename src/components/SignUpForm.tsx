@@ -1,3 +1,7 @@
+import * as React from 'react';
+import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
+import { Link as NavLink } from 'react-router-dom';
+
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -13,9 +17,6 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
-import * as React from 'react';
-import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
-import { Link as NavLink } from 'react-router-dom';
 
 import { isEmpty } from '@/utils';
 
@@ -158,7 +159,7 @@ const SignUpForm = () => {
                 type={showPassword ? 'text' : 'password'}
                 {...register('confirmPassword', {
                   required: true,
-                  validate: value => value === password,
+                  validate: (value) => value === password,
                 })}
               />
             </InputGroup>

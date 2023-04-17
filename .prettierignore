@@ -1,8 +1,13 @@
-.commitlintrc.json
-.prettierrc
+# Ignore artifacts:
+node_modules
 dist
-tsconfig.json
-tsconfig.node.json
+build
+coverage
+public
+dist-ssr
 vite.config.ts
-pnpm-lock.yaml
-package.json
+vite-env.d.ts
+.cache/
+
+# Ignore all HTML files:
+*.html

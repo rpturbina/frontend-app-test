@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { DeleteIcon } from '@chakra-ui/icons';
 import {
   AlertDialog,
@@ -10,7 +12,6 @@ import {
   IconButton,
   useDisclosure,
 } from '@chakra-ui/react';
-import * as React from 'react';
 
 const DeleteConfirmationModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
