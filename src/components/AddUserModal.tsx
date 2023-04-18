@@ -1,3 +1,5 @@
+import { mutate } from 'swr';
+
 import * as React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -24,28 +26,37 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
+import { useAuth } from '@/context/auth';
+import { UserAdd } from '@/types';
+
 const ChakraPoweredDatePicker = chakra(DatePicker);
 
-type AddUserFormValues = {
-  name: string;
-  address: string;
-  gender: 'Pria' | 'Wanita';
-  birthDate: Date;
-};
-
 const AddUserModal = () => {
+  const auth = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { register, handleSubmit, formState, reset, control } =
-    useForm<AddUserFormValues>();
+    useForm<UserAdd>();
 
   const initialRef = React.useRef<HTMLInputElement | null>(null);
   const finalRef = React.useRef(null);
 
   const { ref, ...rest } = register('name', { required: true });
 
-  const onSubmit: SubmitHandler<AddUserFormValues> = (data) => {
+  const onSubmit: SubmitHandler<UserAdd> = (data) => {
     console.log(data);
+    mutate(
+      'https://cms-admin-v2.ihsansolusi.co.id/testapi/user',
+      (url) =>
+        fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }).then((res) => res.json()),
+      false
+    );
     onClose();
     reset();
   };
@@ -122,13 +133,13 @@ const AddUserModal = () => {
               <FormErrorMessage>Pilih jenis kelamin</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4} isInvalid={!!formState.errors.birthDate}>
+            <FormControl mt={4} isInvalid={!!formState.errors.bornDate}>
               <FormLabel>Tanggal lahir</FormLabel>
               <Controller
-                name="birthDate"
+                name="bornDate"
                 control={control}
                 rules={{ required: true }}
-                defaultValue={new Date()}
+                defaultValue={new Date().toLocaleDateString()}
                 render={({ field }) => (
                   <ChakraPoweredDatePicker
                     display="block"
@@ -137,7 +148,7 @@ const AddUserModal = () => {
                     px={4}
                     py={2}
                     borderColor="gray.300"
-                    selected={field.value}
+                    selected={new Date(field.value)}
                     onChange={field.onChange}
                     showYearDropdown
                     dropdownMode="select"
