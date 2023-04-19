@@ -15,11 +15,14 @@ import DeleteConfirmationModal from '@/components/DeleteConfirmationModal';
 import EditUserModal from '@/components/EditUserModal';
 
 import { UserList } from '@/types';
-import { formatDateToDateAndTime, formatDateToIDLocaleString } from '@/utils';
+import {
+  formatDateToDateAndTimeGMT7,
+  formatDateToIDLocaleString,
+} from '@/utils';
 
 const UserTable = ({ users }: { users: UserList }) => {
   return (
-    <TableContainer mt={4}>
+    <TableContainer mt={4} overflowX={'scroll'}>
       <Table variant="simple" size={['sm', 'md']}>
         <Thead>
           <Tr>
@@ -34,13 +37,13 @@ const UserTable = ({ users }: { users: UserList }) => {
         </Thead>
         <Tbody>
           {users?.map((user, index) => (
-            <Tr key={`${user.id}-${user.createdAt}`.toLowerCase()}>
+            <Tr key={`${user.id}-${user.created_at}`.toLowerCase()}>
               <Td>{index + 1}</Td>
               <Td fontWeight={'medium'}>{user.name}</Td>
               <Td>{user.address}</Td>
-              <Td>{user.gender}</Td>
-              <Td>{formatDateToIDLocaleString(user.bornDate)}</Td>
-              <Td>{formatDateToDateAndTime(user.createdAt)}</Td>
+              <Td>{user.gender.toUpperCase()}</Td>
+              <Td>{formatDateToIDLocaleString(user.born_date)}</Td>
+              <Td>{formatDateToDateAndTimeGMT7(user.created_at)}</Td>
               <Td>
                 <Flex columnGap={4}>
                   <IconButton
@@ -52,10 +55,7 @@ const UserTable = ({ users }: { users: UserList }) => {
                   />
                   <EditUserModal
                     initialValues={{
-                      name: user.name,
-                      address: user.address,
-                      gender: user.gender,
-                      bornDate: user.bornDate,
+                      ...user,
                     }}
                   />
                   <DeleteConfirmationModal id={user.id} />

@@ -1,7 +1,7 @@
-const fetcher = async <T>(
+const fetcher = async <JSON = any>(
   input: RequestInfo,
   init?: RequestInit
-): Promise<T> => {
+): Promise<JSON> => {
   const res = await fetch(input, init);
   return res.json();
 };

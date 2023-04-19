@@ -29,7 +29,7 @@ import { useAuth } from '@/context/auth';
 import useUser from '@/hooks/useUser';
 import { createUser } from '@/libs/api';
 import { UserCreate } from '@/types';
-import { formatDateToYYYYMMDD } from '@/utils';
+import { formatDateToDateAndTimeGMT7, formatDateToYYYYMMDD } from '@/utils';
 
 const ChakraPoweredDatePicker = chakra(DatePicker);
 
@@ -37,7 +37,7 @@ const AddUserModal = () => {
   const auth = useAuth();
   const toast = useToast();
   const [isLoading, setIsLoading] = React.useState(false);
-  const { users, mutate } = useUser();
+  const { mutateUser, users } = useUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { register, handleSubmit, formState, reset, control } =
@@ -51,14 +51,16 @@ const AddUserModal = () => {
   const onSubmit: SubmitHandler<UserCreate> = async (data) => {
     const newUser = {
       ...data,
-      bornDate: formatDateToYYYYMMDD(data.bornDate),
+      born_date: formatDateToYYYYMMDD(data.born_date),
+      created_at: formatDateToDateAndTimeGMT7(new Date().toISOString()),
     };
+    console.log(newUser, 'newUser');
 
     setIsLoading(true);
     const { isOk, error } = await createUser(newUser, auth.token);
 
     if (isOk) {
-      mutate({ ...users, data: [...users.data, data] });
+      mutateUser({ ...users, data: [...users.data, newUser] });
       toast({
         title: 'User created successfully.',
         description: 'Yuhu you created a new user.',
@@ -101,7 +103,10 @@ const AddUserModal = () => {
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={() => {
+          onClose();
+          reset();
+        }}
       >
         <ModalOverlay />
         <ModalContent as={'form'} onSubmit={handleSubmit(onSubmit)}>
@@ -152,16 +157,16 @@ const AddUserModal = () => {
               isInvalid={!!formState.errors.gender}
               isDisabled={isLoading}
             >
-              <FormLabel as="legend">P / W</FormLabel>
+              <FormLabel as="legend">L/P</FormLabel>
               <Controller
                 name="gender"
                 control={control}
-                defaultValue="Laki-laki"
+                defaultValue="l"
                 render={({ field }) => (
                   <RadioGroup value={field.value} onChange={field.onChange}>
                     <HStack spacing="24px">
-                      <Radio value="Laki-laki">Laki-laki</Radio>
-                      <Radio value="Perempuan">Perempuan</Radio>
+                      <Radio value="l">Laki-laki</Radio>
+                      <Radio value="p">Perempuan</Radio>
                     </HStack>
                   </RadioGroup>
                 )}
@@ -171,12 +176,12 @@ const AddUserModal = () => {
 
             <FormControl
               mt={4}
-              isInvalid={!!formState.errors.bornDate}
+              isInvalid={!!formState.errors.born_date}
               isDisabled={isLoading}
             >
               <FormLabel>Tanggal lahir</FormLabel>
               <Controller
-                name="bornDate"
+                name="born_date"
                 control={control}
                 rules={{ required: true }}
                 defaultValue={new Date().toISOString()}
@@ -196,6 +201,7 @@ const AddUserModal = () => {
                       dropdownMode="select"
                       todayButton={<Button>Today</Button>}
                       customInput={<Input />}
+                      maxDate={new Date()}
                     />
                   );
                 }}
@@ -218,6 +224,7 @@ const AddUserModal = () => {
               Save
             </Button>
             <Button
+              isDisabled={isLoading}
               onClick={() => {
                 onClose();
                 reset();

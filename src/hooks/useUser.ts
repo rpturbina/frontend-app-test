@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useAuth } from '@/context/auth';
 import { API_BASE_URL } from '@/libs/api';
 import fetcher from '@/libs/fetcher';
-import { UserDetail, UserDetailDTO, UserList } from '@/types';
+import { UserList } from '@/types';
 
 const useUser = () => {
   const auth = useAuth();
@@ -15,13 +15,15 @@ const useUser = () => {
       Authorization: `Bearer ${auth.token}`,
     },
   };
-  const { data, error, isLoading, mutate } = useSWR(
+  const { data, error, isLoading, mutate, isValidating } = useSWR(
     [`${API_BASE_URL}/user`, fetcherInit],
     ([url, init]) => fetcher(url, init)
   );
 
   const users: UserList = React.useMemo(
-    () => data?.data.map((user: UserDetailDTO) => tranformUserDTOtoUser(user)),
+    () =>
+      data?.data.sort((a: { id: number }, b: { id: number }) => a.id - b.id) ||
+      [],
     [data]
   );
 
@@ -31,20 +33,12 @@ const useUser = () => {
   };
 
   return {
-    mutate,
+    mutateUser: mutate,
     users: newData,
     isLoading,
     error,
+    isValidating,
   };
 };
 
 export default useUser;
-
-const tranformUserDTOtoUser = (userDTO: UserDetailDTO): UserDetail => ({
-  id: userDTO.id,
-  name: userDTO.name,
-  address: userDTO.address,
-  gender: userDTO.gender === 'l' ? 'Laki-laki' : 'Perempuan',
-  createdAt: userDTO.created_at,
-  bornDate: userDTO.born_date,
-});
