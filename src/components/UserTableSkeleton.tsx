@@ -1,5 +1,7 @@
 import {
+  BorderProps,
   Flex,
+  LayoutProps,
   Skeleton,
   SkeletonCircle,
   Table,
@@ -11,32 +13,38 @@ import {
   Tr,
 } from '@chakra-ui/react';
 
-const SkeletonRow = ({ width }: { width: string }) => {
+const SkeletonRow = ({
+  borderRadius,
+  height,
+}: {
+  borderRadius: BorderProps['borderRadius'];
+  height: LayoutProps['height'];
+}) => {
   return (
     <Tr>
       <Td>
-        <Skeleton height="1rem" width={width} borderRadius={'md'} />
+        <Skeleton height={height} borderRadius={borderRadius} />
       </Td>
       <Td>
-        <Skeleton height="1rem" width={width} borderRadius={'md'} />
+        <Skeleton height={height} borderRadius={borderRadius} />
       </Td>
       <Td>
-        <Skeleton height="1rem" width={width} borderRadius={'md'} />
+        <Skeleton height={height} borderRadius={borderRadius} />
       </Td>
       <Td>
-        <Skeleton height="1rem" width={width} borderRadius={'md'} />
+        <Skeleton height={height} borderRadius={borderRadius} />
       </Td>
       <Td>
-        <Skeleton height="1rem" width={width} borderRadius={'md'} />
+        <Skeleton height={height} borderRadius={borderRadius} />
       </Td>
       <Td>
-        <Skeleton height="1rem" width={width} borderRadius={'md'} />
+        <Skeleton height={height} borderRadius={borderRadius} />
       </Td>
       <Td>
         <Flex columnGap={4}>
-          <SkeletonCircle size={'10'} />
-          <SkeletonCircle size={'10'} />
-          <SkeletonCircle size={'10'} />
+          <SkeletonCircle size={'8'} />
+          <SkeletonCircle size={'8'} />
+          <SkeletonCircle size={'8'} />
         </Flex>
       </Td>
     </Tr>
@@ -52,17 +60,17 @@ const UserTableSkeleton = () => {
             <Th>No</Th>
             <Th>Nama</Th>
             <Th>Alamat</Th>
-            <Th>P/W</Th>
+            <Th>L/P</Th>
             <Th>Tanggal Lahir</Th>
             <Th>Tanggal Input</Th>
             <Th>Aksi</Th>
           </Tr>
         </Thead>
         <Tbody>
-          <SkeletonRow width="90px" />
-          <SkeletonRow width="120px" />
-          <SkeletonRow width="100px" />
-          <SkeletonRow width="80px" />
+          <SkeletonRow height={'1rem'} borderRadius={'lg'} />
+          <SkeletonRow height={'1rem'} borderRadius={'lg'} />
+          <SkeletonRow height={'1rem'} borderRadius={'lg'} />
+          <SkeletonRow height={'1rem'} borderRadius={'lg'} />
         </Tbody>
       </Table>
     </TableContainer>

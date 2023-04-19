@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Spinner } from '@chakra-ui/react';
 
 import AddUserModal from '@/components/AddUserModal';
 import DashboardLayout from '@/components/DashboardLayout';
@@ -11,7 +11,7 @@ import useUser from '@/hooks/useUser';
 
 const DashboardPage = () => {
   const auth = useAuth();
-  const { users, isLoading } = useUser();
+  const { users, isLoading, isValidating } = useUser();
 
   let tableContent;
 
@@ -34,6 +34,18 @@ const DashboardPage = () => {
           <Heading as={'h2'} size={['sm', 'md']}>
             Users Table
           </Heading>
+          {isValidating && (
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              colorScheme="blue"
+              marginRight={'auto'}
+              opacity={'0.6'}
+              marginLeft={'0.5rem'}
+              display={['none', 'block']}
+            />
+          )}
           <AddUserModal />
         </Flex>
         {tableContent}
