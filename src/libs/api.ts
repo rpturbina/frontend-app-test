@@ -1,4 +1,4 @@
-import { UserCreate, UserLogin, UserRegister } from '@/types';
+import { UserCreate, UserLogin, UserRegister, UserUpdate } from '@/types';
 
 interface LoginDTO {
   token: string;
@@ -91,14 +91,14 @@ export interface UserCreateDTO {
 }
 
 export const createUser = async (
-  { name, address, gender, bornDate }: UserCreate,
+  { name, address, gender, born_date }: UserCreate,
   token: string | null
 ): Promise<ResponseStatus<UserCreateDTO>> => {
   const newUser = {
     name,
     address,
-    gender: gender === 'Laki-laki' ? 'l' : 'p',
-    born_date: bornDate,
+    gender,
+    born_date,
   };
   try {
     const res = await _fetchWithAuth(`${API_BASE_URL}/user`, token, {
@@ -107,6 +107,39 @@ export const createUser = async (
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(newUser),
+    });
+
+    const data: UserCreateDTO | null = await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        data?.detail || 'An error occurred while fetching the data.'
+      );
+    }
+
+    return { isOk: true, data, error: null };
+  } catch (error) {
+    return { isOk: false, error: (error as Error).message, data: null };
+  }
+};
+
+export const updateUser = async (
+  { id, name, address, gender, born_date }: UserUpdate,
+  token: string | null
+): Promise<ResponseStatus<UserCreateDTO>> => {
+  const updatedUser = {
+    name,
+    address,
+    gender,
+    born_date,
+  };
+  try {
+    const res = await _fetchWithAuth(`${API_BASE_URL}/user/${id}`, token, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedUser),
     });
 
     const data: UserCreateDTO | null = await res.json();

@@ -23,36 +23,76 @@ import {
   RadioGroup,
   chakra,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
+
+import { useAuth } from '@/context/auth';
+import useUser from '@/hooks/useUser';
+import { updateUser } from '@/libs/api';
+import { UserCreate, UserDetail, UserUpdate } from '@/types';
+import { formatDateToYYYYMMDD } from '@/utils';
 
 const ChakraPoweredDatePicker = chakra(DatePicker);
 
-type EditUserFormValues = {
-  name: string;
-  address: string;
-  gender: 'Pria' | 'Wanita';
-  birthDate: Date;
-};
-
 type EditUserModalProps = {
-  initialValues: EditUserFormValues;
+  initialValues: UserUpdate;
 };
 
 const EditUserModal = ({ initialValues }: EditUserModalProps) => {
+  const auth = useAuth();
+  const toast = useToast();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const { mutateUser, users } = useUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { register, handleSubmit, formState, reset, control } =
-    useForm<EditUserFormValues>({ defaultValues: initialValues });
+    useForm<UserCreate>({ defaultValues: initialValues });
 
   const initialRef = React.useRef<HTMLInputElement | null>(null);
   const finalRef = React.useRef(null);
 
-  const { ref, ...rest } = register('name', { required: true });
+  const { ref, ...rest } = register('name', { required: true, minLength: 8 });
 
-  const onSubmit: SubmitHandler<EditUserFormValues> = (data) => {
-    console.log(data);
-    onClose();
-    reset();
+  const onSubmit: SubmitHandler<UserCreate> = async (data) => {
+    console.log(data, 'data');
+
+    const updatedUser = {
+      ...data,
+      born_date: formatDateToYYYYMMDD(data.born_date),
+    };
+
+    setIsLoading(true);
+    const { isOk, error } = await updateUser(updatedUser, auth.token);
+
+    if (isOk) {
+      const newUsers = users.data.map((user: UserDetail) => {
+        if (user.id === initialValues.id) {
+          return updatedUser;
+        }
+        return user;
+      });
+      mutateUser({ ...users, data: newUsers });
+      toast({
+        title: 'User updated successfully.',
+        description: `Yuhu you updated ${updatedUser.name}.`,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      onClose();
+      reset();
+    }
+
+    if (!isOk) {
+      toast({
+        title: 'An error occurred. Please try again later.',
+        description: error,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -71,14 +111,20 @@ const EditUserModal = ({ initialValues }: EditUserModalProps) => {
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={() => {
+          onClose();
+          reset();
+        }}
       >
         <ModalOverlay />
         <ModalContent as={'form'} onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Edit user</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isInvalid={!!formState.errors.name}>
+            <FormControl
+              isInvalid={!!formState.errors.name}
+              isDisabled={isLoading}
+            >
               <FormLabel htmlFor="name">Nama</FormLabel>
               <Input
                 id="name"
@@ -89,34 +135,46 @@ const EditUserModal = ({ initialValues }: EditUserModalProps) => {
                   initialRef.current = e;
                 }}
               />
-              <FormErrorMessage>Kolom nama harus diisi</FormErrorMessage>
+              {formState.errors.name?.type === 'required' && (
+                <FormErrorMessage>Kolom nama harus diisi</FormErrorMessage>
+              )}
+              {formState.errors.name?.type === 'minLength' && (
+                <FormErrorMessage>Nama minimal 8 karakter</FormErrorMessage>
+              )}
             </FormControl>
 
-            <FormControl mt={4} isInvalid={!!formState.errors.address}>
+            <FormControl
+              mt={4}
+              isInvalid={!!formState.errors.address}
+              isDisabled={isLoading}
+            >
               <FormLabel htmlFor="address">Alamat</FormLabel>
               <Input
                 id="address"
                 type="text"
                 {...register('address', { required: true })}
               />
-              <FormErrorMessage>Kolom alamat harus diisi</FormErrorMessage>
+              {formState.errors.name?.type === 'required' && (
+                <FormErrorMessage>Kolom alamat harus diisi</FormErrorMessage>
+              )}
             </FormControl>
 
             <FormControl
               as="fieldset"
               mt={4}
               isInvalid={!!formState.errors.gender}
+              isDisabled={isLoading}
             >
-              <FormLabel as="legend">P / W</FormLabel>
+              <FormLabel as="legend">L/P</FormLabel>
               <Controller
                 name="gender"
                 control={control}
-                defaultValue="Pria"
+                defaultValue="l"
                 render={({ field }) => (
                   <RadioGroup value={field.value} onChange={field.onChange}>
                     <HStack spacing="24px">
-                      <Radio value="Pria">Pria</Radio>
-                      <Radio value="Wanita">Wanita</Radio>
+                      <Radio value="l">Laki-laki</Radio>
+                      <Radio value="p">Perempuan</Radio>
                     </HStack>
                   </RadioGroup>
                 )}
@@ -124,26 +182,37 @@ const EditUserModal = ({ initialValues }: EditUserModalProps) => {
               <FormErrorMessage>Pilih jenis kelamin</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4} isInvalid={!!formState.errors.birthDate}>
+            <FormControl
+              mt={4}
+              isInvalid={!!formState.errors.born_date}
+              isDisabled={isLoading}
+            >
               <FormLabel>Tanggal lahir</FormLabel>
               <Controller
-                name="birthDate"
+                name="born_date"
                 control={control}
                 rules={{ required: true }}
-                render={({ field }) => (
-                  <ChakraPoweredDatePicker
-                    display="block"
-                    borderRadius="md"
-                    dateFormat="dd/MM/yyyy"
-                    px={4}
-                    py={2}
-                    borderColor="gray.300"
-                    selected={field.value}
-                    onChange={field.onChange}
-                    showYearDropdown
-                    dropdownMode="select"
-                  />
-                )}
+                defaultValue={new Date().toISOString()}
+                render={({ field }) => {
+                  return (
+                    <ChakraPoweredDatePicker
+                      display="block"
+                      borderRadius="md"
+                      dateFormat="yyyy-MM-dd"
+                      px={4}
+                      py={2}
+                      borderColor="gray.300"
+                      selected={new Date(field.value)}
+                      onChange={field.onChange}
+                      showYearDropdown
+                      showMonthDropdown
+                      dropdownMode="select"
+                      todayButton={<Button>Today</Button>}
+                      customInput={<Input />}
+                      maxDate={new Date()}
+                    />
+                  );
+                }}
               />
               <FormErrorMessage>Pilih tanggal lahir</FormErrorMessage>
             </FormControl>
@@ -158,6 +227,7 @@ const EditUserModal = ({ initialValues }: EditUserModalProps) => {
                 transform: 'translateY(-2px)',
                 boxShadow: 'lg',
               }}
+              isLoading={isLoading}
             >
               Save
             </Button>

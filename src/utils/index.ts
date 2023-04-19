@@ -14,7 +14,7 @@ export const formatDateToYYYYMMDD = (date: string | Date): string => {
   return new Date(date).toISOString().split('T')[0];
 };
 
-export const formatDateToDateAndTime = (inputDatetime: string): string => {
+export const formatDateToDateAndTimeGMT7 = (inputDatetime: string): string => {
   const date = new Date(inputDatetime);
 
   date.setHours(date.getHours() + 7);
