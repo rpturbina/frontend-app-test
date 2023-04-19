@@ -1,50 +1,30 @@
-import useSWR from 'swr';
-
-import * as React from 'react';
-
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
 
 import AddUserModal from '@/components/AddUserModal';
 import DashboardLayout from '@/components/DashboardLayout';
 import UserTable from '@/components/UserTable';
+import UserTableEmpty from '@/components/UserTableEmpty';
 import UserTableSkeleton from '@/components/UserTableSkeleton';
 
 import { useAuth } from '@/context/auth';
-// import { getAllUser } from '@/lib/service';
-import { UserList } from '@/types';
-
-const initialUsers: UserList = [
-  {
-    name: 'Asep',
-    address: 'Nagrek',
-    gender: 'Pria',
-    bornDate: '23 May 1990',
-    createdAt: '26 Jan 2023 11:04',
-  },
-  {
-    name: 'Septian',
-    address: 'Bandung',
-    gender: 'Pria',
-    bornDate: '28 September 1990',
-    createdAt: '28 Jan 2023 12:22',
-  },
-];
+import useUser from '@/hooks/useUser';
 
 const DashboardPage = () => {
   const auth = useAuth();
+  const { users, isLoading } = useUser();
 
-  const { data, isLoading } = useSWR<UserList | null>(
-    'https://cms-admin-v2.ihsansolusi.co.id/testapi/user',
-    (url) =>
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${auth.token}`,
-        },
-      }).then((res) => res.json())
-  );
-  console.log(data);
+  let tableContent;
+
+  if (isLoading) {
+    tableContent = <UserTableSkeleton />;
+  } else {
+    tableContent =
+      users?.data?.length === 0 ? (
+        <UserTableEmpty />
+      ) : (
+        <UserTable users={users.data} />
+      );
+  }
 
   return (
     <DashboardLayout>
@@ -56,7 +36,7 @@ const DashboardPage = () => {
           </Heading>
           <AddUserModal />
         </Flex>
-        {isLoading ? <UserTableSkeleton /> : <UserTable users={initialUsers} />}
+        {tableContent}
       </Box>
     </DashboardLayout>
   );

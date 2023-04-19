@@ -15,22 +15,22 @@ const SkeletonRow = ({ width }: { width: string }) => {
   return (
     <Tr>
       <Td>
-        <Skeleton height="20px" width={width} borderRadius={'md'} />
+        <Skeleton height="1rem" width={width} borderRadius={'md'} />
       </Td>
       <Td>
-        <Skeleton height="20px" width={width} borderRadius={'md'} />
+        <Skeleton height="1rem" width={width} borderRadius={'md'} />
       </Td>
       <Td>
-        <Skeleton height="20px" width={width} borderRadius={'md'} />
+        <Skeleton height="1rem" width={width} borderRadius={'md'} />
       </Td>
       <Td>
-        <Skeleton height="20px" width={width} borderRadius={'md'} />
+        <Skeleton height="1rem" width={width} borderRadius={'md'} />
       </Td>
       <Td>
-        <Skeleton height="20px" width={width} borderRadius={'md'} />
+        <Skeleton height="1rem" width={width} borderRadius={'md'} />
       </Td>
       <Td>
-        <Skeleton height="20px" width={width} borderRadius={'md'} />
+        <Skeleton height="1rem" width={width} borderRadius={'md'} />
       </Td>
       <Td>
         <Flex columnGap={4}>

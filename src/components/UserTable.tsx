@@ -15,7 +15,7 @@ import DeleteConfirmationModal from '@/components/DeleteConfirmationModal';
 import EditUserModal from '@/components/EditUserModal';
 
 import { UserList } from '@/types';
-import { formatDateToIDLocaleString } from '@/utils';
+import { formatDateToDateAndTime, formatDateToIDLocaleString } from '@/utils';
 
 const UserTable = ({ users }: { users: UserList }) => {
   return (
@@ -26,7 +26,7 @@ const UserTable = ({ users }: { users: UserList }) => {
             <Th>No</Th>
             <Th>Nama</Th>
             <Th>Alamat</Th>
-            <Th>P/W</Th>
+            <Th>L/P</Th>
             <Th>Tanggal Lahir</Th>
             <Th>Tanggal Input</Th>
             <Th>Aksi</Th>
@@ -34,13 +34,13 @@ const UserTable = ({ users }: { users: UserList }) => {
         </Thead>
         <Tbody>
           {users?.map((user, index) => (
-            <Tr key={user.createdAt}>
+            <Tr key={`${user.id}-${user.createdAt}`.toLowerCase()}>
               <Td>{index + 1}</Td>
               <Td fontWeight={'medium'}>{user.name}</Td>
               <Td>{user.address}</Td>
               <Td>{user.gender}</Td>
               <Td>{formatDateToIDLocaleString(user.bornDate)}</Td>
-              <Td>{user.createdAt}</Td>
+              <Td>{formatDateToDateAndTime(user.createdAt)}</Td>
               <Td>
                 <Flex columnGap={4}>
                   <IconButton
@@ -55,10 +55,10 @@ const UserTable = ({ users }: { users: UserList }) => {
                       name: user.name,
                       address: user.address,
                       gender: user.gender,
-                      birthDate: new Date(user.bornDate),
+                      bornDate: user.bornDate,
                     }}
                   />
-                  <DeleteConfirmationModal />
+                  <DeleteConfirmationModal id={user.id} />
                 </Flex>
               </Td>
             </Tr>
