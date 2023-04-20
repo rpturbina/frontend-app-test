@@ -29,7 +29,7 @@ import {
 import { useAuth } from '@/context/auth';
 import useUser from '@/hooks/useUser';
 import { updateUser } from '@/libs/api';
-import { UserUpdate } from '@/types';
+import { UserDetail, UserUpdate } from '@/types';
 import { formatDateToYYYYMMDD } from '@/utils';
 
 const ChakraPoweredDatePicker = chakra(DatePicker);
@@ -66,14 +66,16 @@ const EditUserModal = ({ initialValues }: EditUserModalProps) => {
       data: updatedUser,
     } = await updateUser(newUpdateUser, auth.token);
 
+    // console.log('updatedUser', updatedUser);
+
     if (isOk && updatedUser !== null) {
-      // const newUsers = users.data.map((user: UserDetail) => {
-      //   if (user.id === initialValues.id) {
-      //     return updatedUser;
-      //   }
-      //   return user;
-      // });
-      mutateUser({ ...users, data: updatedUser.data });
+      const newUsers = users.data.map((user: UserDetail) => {
+        if (user.id === initialValues.id) {
+          return updatedUser.data;
+        }
+        return user;
+      });
+      mutateUser({ ...users, data: [...newUsers] });
       toast({
         title: 'User updated successfully.',
         description: `Yuhu you updated ${updatedUser.data.name}.`,
@@ -171,7 +173,6 @@ const EditUserModal = ({ initialValues }: EditUserModalProps) => {
               <Controller
                 name="gender"
                 control={control}
-                defaultValue="l"
                 render={({ field }) => (
                   <RadioGroup value={field.value} onChange={field.onChange}>
                     <HStack spacing="24px">

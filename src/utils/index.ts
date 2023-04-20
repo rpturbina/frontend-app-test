@@ -11,7 +11,7 @@ export const formatDateToIDLocaleString = (date: string | Date): string => {
 };
 
 export const formatDateToYYYYMMDD = (date: string | Date): string => {
-  return new Date(date).toISOString().split('T')[0];
+  return new Date(date).toLocaleDateString().split('T')[0];
 };
 
 export const formatDateToDateAndTimeGMT7 = (inputDatetime: string): string => {

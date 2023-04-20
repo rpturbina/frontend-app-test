@@ -1,8 +1,5 @@
-// import ViewUserDetailButton from './ViewUserDetailButton';
-// import { Link } from 'react-router-dom';
-// import { ViewIcon } from '@chakra-ui/icons';
 import {
-  Flex, // IconButton,
+  Flex,
   Table,
   TableContainer,
   Tbody,
@@ -24,7 +21,7 @@ import {
 
 const UserTable = ({ users }: { users: UserList }) => {
   return (
-    <TableContainer mt={4} overflowX={'scroll'}>
+    <TableContainer mt={4}>
       <Table variant="simple" size={['sm', 'md']}>
         <Thead>
           <Tr>
