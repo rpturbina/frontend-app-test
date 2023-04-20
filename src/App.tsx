@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Box } from '@chakra-ui/react';
 
@@ -15,6 +15,7 @@ function App() {
     <Box as="main" bg={'gray.50'}>
       <Routes>
         <Route path="/">
+          <Route index element={<Navigate to={'/dashboard'} />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route element={<RequireAuth />}>
