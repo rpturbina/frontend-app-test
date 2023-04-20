@@ -1,5 +1,4 @@
-import { fetchApi } from './fetch';
-
+// import { fetchApi } from './fetch';
 import { UserCreate, UserLogin, UserRegister, UserUpdate } from '@/types';
 
 interface LoginDTO {
@@ -179,12 +178,7 @@ export const updateUser = async (
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        name: '',
-        address: '',
-        gender: '',
-        born_date,
-      }),
+      body: JSON.stringify(updatedUser),
     });
 
     const data: UserCreateDTO | null = await res.json();

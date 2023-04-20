@@ -1,11 +1,8 @@
-import ViewUserDetailButton from './ViewUserDetailButton';
-
-import { Link } from 'react-router-dom';
-
-import { ViewIcon } from '@chakra-ui/icons';
+// import ViewUserDetailButton from './ViewUserDetailButton';
+// import { Link } from 'react-router-dom';
+// import { ViewIcon } from '@chakra-ui/icons';
 import {
-  Flex,
-  IconButton,
+  Flex, // IconButton,
   Table,
   TableContainer,
   Tbody,
