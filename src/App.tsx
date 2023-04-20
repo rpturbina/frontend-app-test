@@ -8,6 +8,7 @@ import DashboardPage from '@/pages/DashboardPage';
 import LoginPage from '@/pages/LoginPage';
 import NoMatch from '@/pages/NoMatch';
 import RegisterPage from '@/pages/RegisterPage';
+import UserDetailPage from '@/pages/UserDetailPage';
 
 function App() {
   return (
@@ -16,14 +17,10 @@ function App() {
         <Route path="/">
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
-          <Route
-            path="dashboard"
-            element={
-              <RequireAuth>
-                <DashboardPage />
-              </RequireAuth>
-            }
-          />
+          <Route element={<RequireAuth />}>
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="user/:id" element={<UserDetailPage />} />
+          </Route>
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>
