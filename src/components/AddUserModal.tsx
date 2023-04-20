@@ -54,7 +54,7 @@ const AddUserModal = () => {
       born_date: formatDateToYYYYMMDD(data.born_date),
       created_at: formatDateToDateAndTimeGMT7(new Date().toISOString()),
     };
-    console.log(newUser, 'newUser');
+    // console.log(newUser, 'newUser');
 
     setIsLoading(true);
     const { isOk, error } = await createUser(newUser, auth.token);

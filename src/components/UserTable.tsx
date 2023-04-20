@@ -1,3 +1,7 @@
+import ViewUserDetailButton from './ViewUserDetailButton';
+
+import { Link } from 'react-router-dom';
+
 import { ViewIcon } from '@chakra-ui/icons';
 import {
   Flex,
@@ -22,7 +26,7 @@ import {
 
 const UserTable = ({ users }: { users: UserList }) => {
   return (
-    <TableContainer mt={4} overflowX={'scroll'}>
+    <TableContainer mt={4}>
       <Table variant="simple" size={['sm', 'md']}>
         <Thead>
           <Tr>
@@ -46,13 +50,7 @@ const UserTable = ({ users }: { users: UserList }) => {
               <Td>{formatDateToDateAndTimeGMT7(user.created_at)}</Td>
               <Td>
                 <Flex columnGap={4}>
-                  <IconButton
-                    variant={'outline'}
-                    icon={<ViewIcon />}
-                    aria-label="View user detail"
-                    size={'sm'}
-                    border={'none'}
-                  />
+                  {/* <ViewUserDetailButton id={`${user.id}`} /> */}
                   <EditUserModal
                     initialValues={{
                       ...user,

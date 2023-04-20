@@ -1,19 +1,23 @@
 import * as React from 'react';
 import {
-  BsFillBriefcaseFill,
+  // BsFillBriefcaseFill,
   BsGenderFemale,
   BsGenderMale,
 } from 'react-icons/bs';
 import { FaBirthdayCake } from 'react-icons/fa';
-import { MdEmail, MdHeadset, MdLocationOn } from 'react-icons/md';
+import {
+  // MdEmail,
+  MdHeadset,
+  MdLocationOn,
+} from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 
 import { Box, Flex, Icon, Image, chakra } from '@chakra-ui/react';
 
 import useUserId from '@/hooks/useUserId';
-import { API_BASE_URL } from '@/libs/api';
+// import { API_BASE_URL } from '@/libs/api';
 import {
-  formatDateToDateAndTimeGMT7,
+  // formatDateToDateAndTimeGMT7,
   formatDateToIDLocaleString,
 } from '@/utils';
 

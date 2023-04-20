@@ -54,8 +54,6 @@ const EditUserModal = ({ initialValues }: EditUserModalProps) => {
   const { ref, ...rest } = register('name', { required: true, minLength: 8 });
 
   const onSubmit: SubmitHandler<UserCreate> = async (data) => {
-    console.log(data, 'data');
-
     const updatedUser = {
       ...data,
       born_date: formatDateToYYYYMMDD(data.born_date),
