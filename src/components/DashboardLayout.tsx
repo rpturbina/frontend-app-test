@@ -6,7 +6,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Container as={'section'} mx={'auto'} maxW={'1100px'}>
-        <Box minH={'100vh'}>{children}</Box>
+        <Box minH={'100vh'} py={8}>
+          {children}
+        </Box>
       </Container>
     </>
   );

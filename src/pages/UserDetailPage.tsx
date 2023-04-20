@@ -9,10 +9,11 @@ import {
   // MdEmail,
   MdHeadset,
   MdLocationOn,
+  MdLogout,
 } from 'react-icons/md';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
-import { Box, Flex, Icon, Image, chakra } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Image, chakra } from '@chakra-ui/react';
 
 import useUserId from '@/hooks/useUserId';
 // import { API_BASE_URL } from '@/libs/api';
@@ -31,7 +32,6 @@ const UserDetailPage = () => {
 
   return (
     <>
-      <div>{JSON.stringify(user)}</div>;
       <Flex
         bg="#edf3f8"
         _dark={{
@@ -41,6 +41,8 @@ const UserDetailPage = () => {
         w="full"
         alignItems="center"
         justifyContent="center"
+        minH={'100vh'}
+        direction={'column'}
       >
         <Box
           w="sm"
@@ -134,6 +136,22 @@ const UserDetailPage = () => {
             </Flex>
           </Box>
         </Box>
+        <Link to={'/dashboard'}>
+          <Button
+            size={['xs', 'sm']}
+            leftIcon={<MdLogout />}
+            colorScheme="blue"
+            variant={'ghost'}
+            mt={6}
+            _hover={{
+              transform: 'translateY(-2px)',
+              boxShadow: 'lg',
+            }}
+            marginRight={'auto'}
+          >
+            Back to Dashboard
+          </Button>
+        </Link>
       </Flex>
     </>
   );
