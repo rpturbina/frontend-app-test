@@ -35,7 +35,7 @@ Before you can use this project, you should have the following software installe
 To get started, clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/your-username/your-project.git
+git clone https://github.com/rpturbina/frontend-app-test.git
 cd your-project
 pnpm install
 ```

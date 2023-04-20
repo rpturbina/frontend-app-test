@@ -1,3 +1,7 @@
+import * as React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Link as NavLink, useNavigate } from 'react-router-dom';
+
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -13,27 +17,16 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
-import * as React from 'react';
-import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
-import { Link as NavLink } from 'react-router-dom';
 
+import { useAuth } from '@/context/auth';
+import { login } from '@/libs/api';
+// import { login } from '@/lib/service';
+import { UserLogin } from '@/types';
 import { isEmpty } from '@/utils';
 
-type SignUpFormValues = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
-
-const myPromise = () =>
-  new Promise((resolve, reject) => {
-    setTimeout(() => {
-      reject('foo');
-    }, 500);
-  });
-
-const SignUpForm = () => {
+const LoginForm = () => {
+  const auth = useAuth();
+  const navigate = useNavigate();
   const toast = useToast();
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -42,42 +35,35 @@ const SignUpForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-    control,
-  } = useForm<SignUpFormValues>();
+  } = useForm<UserLogin>();
 
-  const password = useWatch({
-    name: 'password',
-    control,
-    defaultValue: '',
-  });
-
-  const onSubmit: SubmitHandler<SignUpFormValues> = async ({
-    name,
-    email,
-    password,
-  }) => {
+  const onSubmit: SubmitHandler<UserLogin> = async ({ email, password }) => {
     setIsLoading(true);
-    console.log(isLoading);
-    try {
-      // await signUp({ name, email, password });
-      await myPromise();
+    const { isOk, data, error } = await login({ email, password });
+
+    if (isOk && data !== null) {
+      auth.login(data?.token);
       toast({
-        title: 'Account created.',
-        description: "We've created your account for you.",
+        title: 'Login success.',
+        description: "Yuhu you're logged in.",
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
-    } catch (errors) {
+      navigate('/dashboard');
+    }
+
+    if (!isOk) {
       toast({
-        title: 'Something went wrong. Please try again.',
+        title: 'An error occurred. Please try again later.',
+        description: error,
         status: 'error',
         duration: 3000,
         isClosable: true,
       });
-    } finally {
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
   };
 
   const handleTogglePassword = () => setShowPassword(!showPassword);
@@ -94,19 +80,9 @@ const SignUpForm = () => {
     >
       <Box p={6} bgColor={'white'}>
         <Heading as={'h2'} size={'lg'} textAlign={'center'}>
-          Sign up
+          Login
         </Heading>
         <Box as="form" mt={4} onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isInvalid={!!errors.name}>
-            <FormLabel htmlFor="name">Nama</FormLabel>
-            <Input
-              id="name"
-              type="text"
-              {...register('name', { required: true })}
-            />
-            <FormErrorMessage>Kolom nama harus diisi</FormErrorMessage>
-          </FormControl>
-
           <FormControl isInvalid={!!errors.email} mt={4}>
             <FormLabel htmlFor="email">Email</FormLabel>
             <Input
@@ -133,7 +109,7 @@ const SignUpForm = () => {
                 type={showPassword ? 'text' : 'password'}
                 {...register('password', {
                   required: true,
-                  minLength: 6,
+                  minLength: 8,
                 })}
               />
               <InputRightElement h={'full'}>
@@ -146,29 +122,7 @@ const SignUpForm = () => {
               <FormErrorMessage>Kolom password harus diisi</FormErrorMessage>
             )}
             {errors.password?.type === 'minLength' && (
-              <FormErrorMessage>Password minimal 6 karakter</FormErrorMessage>
-            )}
-          </FormControl>
-
-          <FormControl isInvalid={!!errors.confirmPassword} mt={4}>
-            <FormLabel htmlFor="confirmPassword">Konfirmasi Password</FormLabel>
-            <InputGroup>
-              <Input
-                id="confirmPassword"
-                type={showPassword ? 'text' : 'password'}
-                {...register('confirmPassword', {
-                  required: true,
-                  validate: value => value === password,
-                })}
-              />
-            </InputGroup>
-            {errors.confirmPassword?.type === 'required' && (
-              <FormErrorMessage>
-                Kolom konfimasi password harus diisi
-              </FormErrorMessage>
-            )}
-            {errors.confirmPassword?.type === 'validate' && (
-              <FormErrorMessage>Password harus sama</FormErrorMessage>
+              <FormErrorMessage>Password minimal 8 karakter</FormErrorMessage>
             )}
           </FormControl>
 
@@ -180,16 +134,16 @@ const SignUpForm = () => {
             isDisabled={!isEmpty(errors)}
             w={'full'}
             isLoading={isLoading}
-            loadingText="Signing up"
+            loadingText="Login"
           >
-            Sign Up
+            Login
           </Button>
 
           <Text align={'center'} mt={6}>
-            Sudah punya akun?{' '}
-            <NavLink to={'/signin'}>
+            Belum punya akun?{' '}
+            <NavLink to={'/register'}>
               <Link as={'span'} color={'blue.400'}>
-                Masuk
+                Daftar
               </Link>
             </NavLink>
           </Text>
@@ -199,4 +153,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default LoginForm;

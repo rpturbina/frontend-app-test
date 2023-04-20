@@ -1,4 +1,4 @@
-import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
+import { ViewIcon } from '@chakra-ui/icons';
 import {
   Flex,
   IconButton,
@@ -13,33 +13,37 @@ import {
 
 import DeleteConfirmationModal from '@/components/DeleteConfirmationModal';
 import EditUserModal from '@/components/EditUserModal';
-import { User } from '@/types';
-import { formatDateToIDLocaleString } from '@/utils';
 
-const UserTable = ({ users }: { users: User[] }) => {
+import { UserList } from '@/types';
+import {
+  formatDateToDateAndTimeGMT7,
+  formatDateToIDLocaleString,
+} from '@/utils';
+
+const UserTable = ({ users }: { users: UserList }) => {
   return (
-    <TableContainer mt={4}>
+    <TableContainer mt={4} overflowX={'scroll'}>
       <Table variant="simple" size={['sm', 'md']}>
         <Thead>
           <Tr>
             <Th>No</Th>
             <Th>Nama</Th>
             <Th>Alamat</Th>
-            <Th>P/W</Th>
+            <Th>L/P</Th>
             <Th>Tanggal Lahir</Th>
             <Th>Tanggal Input</Th>
             <Th>Aksi</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {users.map((user, index) => (
-            <Tr key={user.createdAt}>
+          {users?.map((user, index) => (
+            <Tr key={`${user.id}-${user.created_at}`.toLowerCase()}>
               <Td>{index + 1}</Td>
               <Td fontWeight={'medium'}>{user.name}</Td>
               <Td>{user.address}</Td>
-              <Td>{user.gender}</Td>
-              <Td>{formatDateToIDLocaleString(user.birthDate)}</Td>
-              <Td>{user.createdAt}</Td>
+              <Td>{user.gender.toUpperCase()}</Td>
+              <Td>{formatDateToIDLocaleString(user.born_date)}</Td>
+              <Td>{formatDateToDateAndTimeGMT7(user.created_at)}</Td>
               <Td>
                 <Flex columnGap={4}>
                   <IconButton
@@ -51,13 +55,10 @@ const UserTable = ({ users }: { users: User[] }) => {
                   />
                   <EditUserModal
                     initialValues={{
-                      name: user.name,
-                      address: user.address,
-                      gender: user.gender,
-                      birthDate: new Date(user.birthDate),
+                      ...user,
                     }}
                   />
-                  <DeleteConfirmationModal />
+                  <DeleteConfirmationModal id={user.id} />
                 </Flex>
               </Td>
             </Tr>
