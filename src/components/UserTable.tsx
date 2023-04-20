@@ -24,7 +24,7 @@ import {
 
 const UserTable = ({ users }: { users: UserList }) => {
   return (
-    <TableContainer mt={4}>
+    <TableContainer mt={4} overflowX={'scroll'}>
       <Table variant="simple" size={['sm', 'md']}>
         <Thead>
           <Tr>
