@@ -1,5 +1,5 @@
 // import { fetchApi } from './fetch';
-import { UserCreate, UserLogin, UserRegister, UserUpdate } from '@/types';
+import { User, UserCreate, UserLogin, UserRegister, UserUpdate } from '@/types';
 
 interface LoginDTO {
   token: string;
@@ -31,10 +31,10 @@ export const login = async ({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
-    console.log(res.statusText, 'login');
+    // console.log(res.statusText, 'login');
     const data: LoginDTO | null = await res.json();
 
-    console.log(data, 'login');
+    // console.log(data, 'login');
 
     if (!res.ok) {
       throw new Error(
@@ -97,7 +97,7 @@ export const register = async ({
 
     const data: RegisterDTO | null = await res.json();
 
-    console.log(data, 'register');
+    // console.log(data, 'register');
 
     if (!res.ok) {
       throw new Error(
@@ -126,6 +126,12 @@ const _fetchWithAuth = async (
 
 export interface UserCreateDTO {
   detail: string;
+  data: User;
+}
+
+export interface UserUpdateDTO {
+  detail: string;
+  data: User;
 }
 
 export const createUser = async (
@@ -149,7 +155,7 @@ export const createUser = async (
 
     const data: UserCreateDTO | null = await res.json();
 
-    console.log(data, 'createUser');
+    // console.log(data, 'createUser');
     if (!res.ok) {
       throw new Error(
         data?.detail || 'An error occurred while fetching the data.'
@@ -165,7 +171,7 @@ export const createUser = async (
 export const updateUser = async (
   { id, name, address, gender, born_date }: UserUpdate,
   token: string | null
-): Promise<ResponseStatus<UserCreateDTO>> => {
+): Promise<ResponseStatus<UserUpdateDTO>> => {
   const updatedUser = {
     name,
     address,
@@ -181,9 +187,9 @@ export const updateUser = async (
       body: JSON.stringify(updatedUser),
     });
 
-    const data: UserCreateDTO | null = await res.json();
+    const data: UserUpdateDTO | null = await res.json();
 
-    console.log(data, 'updateUser');
+    // console.log(data, 'updateUser');
 
     if (!res.ok) {
       throw new Error(
@@ -203,9 +209,9 @@ export const deleteUser = async (id: number, token: string | null) => {
       method: 'DELETE',
     });
 
-    const data = await res.json();
+    // const data = await res.json();
 
-    console.log(data, 'deleteUser');
+    // console.log(data, 'deleteUser');
 
     if (!res.ok) {
       throw new Error('An error occurred while fetching the data.');

@@ -14,6 +14,7 @@ import {
 
 import DeleteConfirmationModal from '@/components/DeleteConfirmationModal';
 import EditUserModal from '@/components/EditUserModal';
+import ViewUserDetailButton from '@/components/ViewUserDetailButton';
 
 import { UserList } from '@/types';
 import {
@@ -47,7 +48,7 @@ const UserTable = ({ users }: { users: UserList }) => {
               <Td>{formatDateToDateAndTimeGMT7(user.created_at)}</Td>
               <Td>
                 <Flex columnGap={4}>
-                  {/* <ViewUserDetailButton id={`${user.id}`} /> */}
+                  <ViewUserDetailButton id={`${user.id}`} />
                   <EditUserModal
                     initialValues={{
                       ...user,

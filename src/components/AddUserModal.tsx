@@ -57,10 +57,14 @@ const AddUserModal = () => {
     // console.log(newUser, 'newUser');
 
     setIsLoading(true);
-    const { isOk, error } = await createUser(newUser, auth.token);
+    const {
+      isOk,
+      error,
+      data: createdUser,
+    } = await createUser(newUser, auth.token);
 
-    if (isOk) {
-      mutateUser({ ...users, data: [...users.data, newUser] });
+    if (isOk && createdUser !== null) {
+      mutateUser({ ...users, data: [...users.data, createdUser.data] });
       toast({
         title: 'User created successfully.',
         description: 'Yuhu you created a new user.',

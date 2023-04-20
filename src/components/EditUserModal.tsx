@@ -29,7 +29,7 @@ import {
 import { useAuth } from '@/context/auth';
 import useUser from '@/hooks/useUser';
 import { updateUser } from '@/libs/api';
-import { UserCreate, UserDetail, UserUpdate } from '@/types';
+import { UserUpdate } from '@/types';
 import { formatDateToYYYYMMDD } from '@/utils';
 
 const ChakraPoweredDatePicker = chakra(DatePicker);
@@ -46,33 +46,37 @@ const EditUserModal = ({ initialValues }: EditUserModalProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { register, handleSubmit, formState, reset, control } =
-    useForm<UserCreate>({ defaultValues: initialValues });
+    useForm<UserUpdate>({ defaultValues: initialValues });
 
   const initialRef = React.useRef<HTMLInputElement | null>(null);
   const finalRef = React.useRef(null);
 
   const { ref, ...rest } = register('name', { required: true, minLength: 8 });
 
-  const onSubmit: SubmitHandler<UserCreate> = async (data) => {
-    const updatedUser = {
+  const onSubmit: SubmitHandler<UserUpdate> = async (data) => {
+    const newUpdateUser = {
       ...data,
       born_date: formatDateToYYYYMMDD(data.born_date),
     };
 
     setIsLoading(true);
-    const { isOk, error } = await updateUser(updatedUser, auth.token);
+    const {
+      isOk,
+      error,
+      data: updatedUser,
+    } = await updateUser(newUpdateUser, auth.token);
 
-    if (isOk) {
-      const newUsers = users.data.map((user: UserDetail) => {
-        if (user.id === initialValues.id) {
-          return updatedUser;
-        }
-        return user;
-      });
-      mutateUser({ ...users, data: newUsers });
+    if (isOk && updatedUser !== null) {
+      // const newUsers = users.data.map((user: UserDetail) => {
+      //   if (user.id === initialValues.id) {
+      //     return updatedUser;
+      //   }
+      //   return user;
+      // });
+      mutateUser({ ...users, data: updatedUser.data });
       toast({
         title: 'User updated successfully.',
-        description: `Yuhu you updated ${updatedUser.name}.`,
+        description: `Yuhu you updated ${updatedUser.data.name}.`,
         status: 'success',
         duration: 3000,
         isClosable: true,

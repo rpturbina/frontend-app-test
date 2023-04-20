@@ -31,7 +31,7 @@ const useUserId = (id?: string) => {
     ([url, init]) => fetcher(url, init)
   );
 
-  console.log(data, 'getUser');
+  // console.log(data, 'getUser');
 
   // const users: UserList = React.useMemo(
   //   () =>
