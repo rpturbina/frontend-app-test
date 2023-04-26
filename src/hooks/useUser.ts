@@ -20,8 +20,6 @@ const useUser = () => {
     ([url, init]) => fetcher(url, init)
   );
 
-  // console.log(data, 'getUsers');
-
   const users: UserList = React.useMemo(
     () =>
       data?.data.sort((a: { id: number }, b: { id: number }) => a.id - b.id) ||
