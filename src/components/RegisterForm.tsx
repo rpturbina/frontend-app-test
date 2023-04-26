@@ -1,44 +1,27 @@
+import PasswordInput from './PasswordInput';
+
 import * as React from 'react';
-import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Link as NavLink, useNavigate } from 'react-router-dom';
 
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Heading,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Link,
-  Text,
-  useToast,
-} from '@chakra-ui/react';
+import { Box, Button, Heading, Link, Text, useToast } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import CustomInput from '@/components/CustomInput';
 
 import { register as registerUser } from '@/libs/api';
 import { UserRegister } from '@/types';
 import { isEmpty } from '@/utils';
+import { userRegistrationSchema } from '@/validation/schema';
 
 const RegisterForm = () => {
   const toast = useToast();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-  } = useForm<UserRegister>();
-
-  const password = useWatch({
-    name: 'password',
-    control,
-    defaultValue: '',
+  const methods = useForm<UserRegister>({
+    mode: 'onTouched',
+    resolver: yupResolver(userRegistrationSchema),
   });
 
   const onSubmit: SubmitHandler<UserRegister> = async ({
@@ -57,7 +40,7 @@ const RegisterForm = () => {
         duration: 3000,
         isClosable: true,
       });
-      navigate('/dashboard');
+      navigate('/login');
     }
 
     if (!isOk) {
@@ -73,8 +56,6 @@ const RegisterForm = () => {
     setIsLoading(false);
   };
 
-  const handleTogglePassword = () => setShowPassword(!showPassword);
-
   return (
     <Box
       w="full"
@@ -89,109 +70,42 @@ const RegisterForm = () => {
         <Heading as={'h2'} size={'lg'} textAlign={'center'}>
           Register
         </Heading>
-        <Box as="form" mt={4} onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isInvalid={!!errors.name}>
-            <FormLabel htmlFor="name">Nama</FormLabel>
-            <Input
-              id="name"
-              type="text"
-              {...register('name', { required: true, minLength: 8 })}
-            />
-            {errors.name?.type === 'required' && (
-              <FormErrorMessage>Kolom nama harus diisi</FormErrorMessage>
-            )}
-            {errors.name?.type === 'minLength' && (
-              <FormErrorMessage>Nama minimal 8 karakter</FormErrorMessage>
-            )}
-          </FormControl>
-
-          <FormControl isInvalid={!!errors.email} mt={4}>
-            <FormLabel htmlFor="email">Email</FormLabel>
-            <Input
+        <FormProvider {...methods}>
+          <Box as="form" mt={4} onSubmit={methods.handleSubmit(onSubmit)}>
+            <CustomInput id="name" label="Nama" placeholder="Nama" />
+            <CustomInput
               id="email"
+              label="Email"
+              placeholder="Email"
               type="email"
-              {...register('email', {
-                required: true,
-                pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              })}
             />
-            {errors.email?.type === 'required' && (
-              <FormErrorMessage>Kolom email harus diisi</FormErrorMessage>
-            )}
-            {errors.email?.type === 'pattern' && (
-              <FormErrorMessage>Email tidak valid</FormErrorMessage>
-            )}
-          </FormControl>
-
-          <FormControl isInvalid={!!errors.password} mt={4}>
-            <FormLabel htmlFor="password">Password</FormLabel>
-            <InputGroup>
-              <Input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                {...register('password', {
-                  required: true,
-                  minLength: 8,
-                })}
-              />
-              <InputRightElement h={'full'}>
-                <Button variant={'ghost'} onClick={handleTogglePassword}>
-                  {showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-            {errors.password?.type === 'required' && (
-              <FormErrorMessage>Kolom password harus diisi</FormErrorMessage>
-            )}
-            {errors.password?.type === 'minLength' && (
-              <FormErrorMessage>Password minimal 8 karakter</FormErrorMessage>
-            )}
-          </FormControl>
-
-          <FormControl isInvalid={!!errors.confirmPassword} mt={4}>
-            <FormLabel htmlFor="confirmPassword">Konfirmasi Password</FormLabel>
-            <InputGroup>
-              <Input
-                id="confirmPassword"
-                type={showPassword ? 'text' : 'password'}
-                {...register('confirmPassword', {
-                  required: true,
-                  validate: (value) => value === password,
-                })}
-              />
-            </InputGroup>
-            {errors.confirmPassword?.type === 'required' && (
-              <FormErrorMessage>
-                Kolom konfimasi password harus diisi
-              </FormErrorMessage>
-            )}
-            {errors.confirmPassword?.type === 'validate' && (
-              <FormErrorMessage>Password harus sama</FormErrorMessage>
-            )}
-          </FormControl>
-
-          <Button
-            mt={6}
-            colorScheme="blue"
-            size={'lg'}
-            type="submit"
-            isDisabled={!isEmpty(errors)}
-            w={'full'}
-            isLoading={isLoading}
-            loadingText="Register"
-          >
-            Register
-          </Button>
-
-          <Text align={'center'} mt={6}>
-            Sudah punya akun?{' '}
-            <NavLink to={'/login'}>
-              <Link as={'span'} color={'blue.400'}>
-                Masuk
-              </Link>
-            </NavLink>
-          </Text>
-        </Box>
+            <PasswordInput
+              label="Password"
+              placeholder="Password"
+              withConfirmationPassword
+            />
+            <Button
+              mt={6}
+              colorScheme="blue"
+              size={'lg'}
+              type="submit"
+              isDisabled={!isEmpty(methods.formState.errors)}
+              w={'full'}
+              isLoading={isLoading}
+              loadingText="Register"
+            >
+              Register
+            </Button>
+            <Text align={'center'} mt={6}>
+              Sudah punya akun?{' '}
+              <NavLink to={'/login'}>
+                <Link as={'span'} color={'blue.400'}>
+                  Masuk
+                </Link>
+              </NavLink>
+            </Text>
+          </Box>
+        </FormProvider>
       </Box>
     </Box>
   );
