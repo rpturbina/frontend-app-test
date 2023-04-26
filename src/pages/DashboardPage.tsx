@@ -1,9 +1,10 @@
 import { MdLogout } from 'react-icons/md';
 
+import { AddIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Heading, Spinner } from '@chakra-ui/react';
 
-import AddUserModal from '@/components/AddUserModal';
 import DashboardLayout from '@/components/DashboardLayout';
+import UserFormModal from '@/components/UserFormModal';
 import UserTable from '@/components/UserTable';
 import UserTableEmpty from '@/components/UserTableEmpty';
 import UserTableSkeleton from '@/components/UserTableSkeleton';
@@ -30,7 +31,6 @@ const DashboardPage = () => {
 
   return (
     <DashboardLayout>
-      {/* <Button onClick={auth.logout}>Logout</Button> */}
       <Button
         size={['xs', 'sm']}
         onClick={auth.logout}
@@ -62,7 +62,22 @@ const DashboardPage = () => {
               display={['none', 'block']}
             />
           )}
-          <AddUserModal />
+          <UserFormModal>
+            {(onOpen) => (
+              <Button
+                size={['xs', 'sm']}
+                onClick={onOpen}
+                leftIcon={<AddIcon />}
+                colorScheme="blue"
+                _hover={{
+                  transform: 'translateY(-2px)',
+                  boxShadow: 'lg',
+                }}
+              >
+                Tambah User
+              </Button>
+            )}
+          </UserFormModal>
         </Flex>
         {tableContent}
       </Box>

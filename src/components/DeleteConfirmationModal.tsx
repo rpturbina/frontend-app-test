@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { DeleteIcon } from '@chakra-ui/icons';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -9,7 +8,6 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
-  IconButton,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
@@ -21,9 +19,13 @@ import { UserDetail } from '@/types';
 
 type DeleteConfirmationModalProps = {
   id: number;
+  children: (onOpen: () => void) => React.ReactNode;
 };
 
-const DeleteConfirmationModal = ({ id }: DeleteConfirmationModalProps) => {
+const DeleteConfirmationModal = ({
+  id,
+  children,
+}: DeleteConfirmationModalProps) => {
   const auth = useAuth();
   const toast = useToast();
   const { mutateUser, users } = useUser();
@@ -61,15 +63,7 @@ const DeleteConfirmationModal = ({ id }: DeleteConfirmationModalProps) => {
 
   return (
     <>
-      <IconButton
-        variant={'outline'}
-        icon={<DeleteIcon />}
-        aria-label="Delete user"
-        colorScheme="red"
-        size={'sm'}
-        border={'none'}
-        onClick={onOpen}
-      />
+      {children(onOpen)}
 
       <AlertDialog
         isOpen={isOpen}

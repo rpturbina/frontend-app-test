@@ -1,5 +1,9 @@
+import { MouseEventHandler } from 'react';
+
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import {
   Flex,
+  IconButton,
   Table,
   TableContainer,
   Tbody,
@@ -10,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 
 import DeleteConfirmationModal from '@/components/DeleteConfirmationModal';
-import EditUserModal from '@/components/EditUserModal';
+import UserFormModal from '@/components/UserFormModal';
 import ViewUserDetailButton from '@/components/ViewUserDetailButton';
 
 import { UserList } from '@/types';
@@ -46,12 +50,39 @@ const UserTable = ({ users }: { users: UserList }) => {
               <Td>
                 <Flex columnGap={4}>
                   <ViewUserDetailButton id={`${user.id}`} />
-                  <EditUserModal
+                  <UserFormModal
+                    isEditing
                     initialValues={{
                       ...user,
                     }}
-                  />
-                  <DeleteConfirmationModal id={user.id} />
+                  >
+                    {(
+                      onOpen: MouseEventHandler<HTMLButtonElement> | undefined
+                    ) => (
+                      <IconButton
+                        variant={'outline'}
+                        icon={<EditIcon />}
+                        aria-label="Edit user"
+                        colorScheme="blue"
+                        size={'sm'}
+                        border={'none'}
+                        onClick={onOpen}
+                      />
+                    )}
+                  </UserFormModal>
+                  <DeleteConfirmationModal id={user.id}>
+                    {(onOpen) => (
+                      <IconButton
+                        variant={'outline'}
+                        icon={<DeleteIcon />}
+                        aria-label="Delete user"
+                        colorScheme="red"
+                        size={'sm'}
+                        border={'none'}
+                        onClick={onOpen}
+                      />
+                    )}
+                  </DeleteConfirmationModal>
                 </Flex>
               </Td>
             </Tr>

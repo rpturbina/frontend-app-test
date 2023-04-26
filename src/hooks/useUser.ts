@@ -1,5 +1,7 @@
 import useSWR from 'swr';
 
+import * as React from 'react';
+
 import { useAuth } from '@/context/auth';
 import { API_BASE_URL } from '@/libs/api';
 import fetcher from '@/libs/fetcher';
@@ -18,11 +20,12 @@ const useUser = () => {
     ([url, init]) => fetcher(url, init)
   );
 
-  // console.log('useUser', data);
-
-  const users: UserList =
-    data?.data.sort((a: { id: number }, b: { id: number }) => a.id - b.id) ||
-    [];
+  const users: UserList = React.useMemo(
+    () =>
+      data?.data.sort((a: { id: number }, b: { id: number }) => a.id - b.id) ||
+      [],
+    [data]
+  );
 
   const newData = {
     ...data,
