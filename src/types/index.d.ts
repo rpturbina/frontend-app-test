@@ -5,7 +5,7 @@ export interface User {
   password: string;
   address: string;
   gender: 'l' | 'p';
-  born_date: string;
+  born_date: Date | string;
   created_at: string;
 }
 
@@ -22,6 +22,11 @@ export interface UserDetailDTO {
   user_name: string;
 }
 
+export interface UserCreate extends Omit<User, 'email' | 'password'> {
+  id?: number;
+  created_at?: string;
+}
+
 export type UserDetail = Omit<User, 'email' | 'password'>;
 
 export type UserList = UserDetail[];
@@ -32,7 +37,5 @@ export interface UserRegister
   extends Pick<User, 'name' | 'email' | 'password'> {
   confirmPassword?: string;
 }
-
-export type UserCreate = Omit<User, 'email' | 'password'>;
 
 export type UserUpdate = UserCreate;
