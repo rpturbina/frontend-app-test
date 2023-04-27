@@ -6,7 +6,6 @@ import { Box, Button, Flex, Heading, Spinner } from '@chakra-ui/react';
 import DashboardLayout from '@/components/DashboardLayout';
 import UserFormModal from '@/components/UserFormModal';
 import UserTable from '@/components/UserTable';
-import UserTableEmpty from '@/components/UserTableEmpty';
 import UserTableSkeleton from '@/components/UserTableSkeleton';
 
 import { useAuth } from '@/context/auth';
@@ -21,12 +20,7 @@ const DashboardPage = () => {
   if (isLoading) {
     tableContent = <UserTableSkeleton />;
   } else {
-    tableContent =
-      users?.data?.length === 0 ? (
-        <UserTableEmpty />
-      ) : (
-        <UserTable users={users.data} />
-      );
+    tableContent = <UserTable users={users.data} />;
   }
 
   return (

@@ -15,6 +15,7 @@ import {
 
 import DeleteConfirmationModal from '@/components/DeleteConfirmationModal';
 import UserFormModal from '@/components/UserFormModal';
+import UserTableEmpty from '@/components/UserTableEmpty';
 import ViewUserDetailButton from '@/components/ViewUserDetailButton';
 
 import { UserList } from '@/types';
@@ -24,6 +25,7 @@ import {
 } from '@/utils';
 
 const UserTable = ({ users }: { users: UserList }) => {
+  if (users.length === 0) return <UserTableEmpty />;
   return (
     <TableContainer mt={4}>
       <Table variant="simple" size={['sm', 'md']}>
