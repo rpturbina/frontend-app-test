@@ -71,7 +71,6 @@ const UserFormModal = ({
         isClosable: true,
       });
       onClose();
-      methods.reset();
     }
 
     if (!isOk) {
@@ -85,6 +84,10 @@ const UserFormModal = ({
     }
     setIsLoading(false);
   };
+
+  React.useEffect(() => {
+    if (methods.formState.isSubmitSuccessful) methods.reset(initialValues);
+  }, [methods.formState.isSubmitSuccessful]);
 
   const onEditSubmit: SubmitHandler<UserUpdate> = async (data) => {
     setIsLoading(true);
@@ -128,10 +131,7 @@ const UserFormModal = ({
     <CustomModal
       openTrigger={(onOpen) => children(onOpen)}
       initialRef={initialRef}
-      onClose={() => {
-        onClose();
-        methods.reset();
-      }}
+      onClose={onClose}
       onOpen={onOpen}
       isOpen={isOpen}
       finalRef={finalRef}
@@ -178,10 +178,7 @@ const UserFormModal = ({
             </Button>
             <Button
               isDisabled={isLoading}
-              onClick={() => {
-                onClose();
-                methods.reset();
-              }}
+              onClick={onClose}
               _hover={{
                 transform: 'translateY(-2px)',
                 boxShadow: 'lg',
