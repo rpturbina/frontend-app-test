@@ -1,12 +1,12 @@
-import CustomInput from './CustomInput';
-import PasswordInput from './PasswordInput';
-
 import * as React from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Link as NavLink, useNavigate } from 'react-router-dom';
 
 import { Box, Button, Heading, Link, Text, useToast } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+
+import CustomInput from '@/components/CustomInput';
+import PasswordInput from '@/components/PasswordInput';
 
 import { useAuth } from '@/context/auth';
 import { login } from '@/libs/api';
@@ -51,7 +51,6 @@ const LoginForm = () => {
     }
 
     setIsLoading(false);
-    console.log({ email, password });
   };
 
   return (

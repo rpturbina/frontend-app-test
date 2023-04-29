@@ -39,7 +39,7 @@ const DeleteConfirmationModal = ({
 
     if (isOk) {
       const newUsers = users.data.filter((user: UserDetail) => user.id !== id);
-      mutateUser({ ...users, data: newUsers });
+      await mutateUser({ ...users, data: newUsers });
       toast({
         title: 'User deleted.',
         status: 'success',

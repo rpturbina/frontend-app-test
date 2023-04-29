@@ -61,7 +61,7 @@ const EditUserModal = ({ initialValues, children }: EditUserModalProps) => {
         }
         return user;
       });
-      mutateUser({ ...users, data: newUsers });
+      await mutateUser({ ...users, data: newUsers });
       toast({
         title: 'User updated successfully.',
         description: `Yuhu you updated ${updatedUser.data.name}.`,

@@ -62,7 +62,7 @@ const UserFormModal = ({
     } = await createUser(newUser, auth.token);
 
     if (isOk && createdUser !== null) {
-      mutateUser({ ...users, data: [...users.data, createdUser.data] });
+      await mutateUser({ ...users, data: [...users.data, createdUser.data] });
       toast({
         title: 'User created successfully.',
         description: 'Yuhu you created a new user.',
@@ -104,7 +104,7 @@ const UserFormModal = ({
         }
         return user;
       });
-      mutateUser({ ...users, data: newUsers });
+      await mutateUser({ ...users, data: newUsers });
       toast({
         title: 'User updated successfully.',
         description: `Yuhu you updated ${updatedUser.data.name}.`,
