@@ -22,7 +22,7 @@ const ErrorPage = () => {
           </Flex>
         </Box>
         <Heading as="h2" size={['md', 'lg']} mt={6}>
-          Something went wrong
+          Something went wrong 😔
         </Heading>
         <Link href={'/'}>
           <Button
