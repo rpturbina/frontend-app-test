@@ -14,7 +14,7 @@ const UserDetailCardSkeleton = () => {
       rounded="lg"
       overflow="hidden"
     >
-      <Skeleton isLoaded={false} w={'full'} h={56} />
+      <Skeleton w={'full'} h={56} />
       <Box pt={4} pb={6} px={6}>
         <Skeleton borderRadius={'lg'} h={7} />
         <Flex
