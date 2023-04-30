@@ -1,49 +1,14 @@
-import useSWR, { preload } from 'swr';
+import useSWR from 'swr';
 
-// import * as React from 'react';
-import { useAuth } from '@/context/auth';
-import { API_BASE_URL } from '@/libs/api';
-import fetcher from '@/libs/fetcher';
+import userApi, { APIResponse } from '@/apis/userApi';
+import { UserDetail } from '@/types';
 
-export const prefetchUserId = (id: string, token: string | null) => {
-  const fetcherInit: RequestInit = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  return preload(
-    id ? [`${API_BASE_URL}/user/${id}`, fetcherInit] : null,
-    ([url, init]) => fetcher(url, init)
-  );
-};
-
-const useUserId = (id?: string) => {
-  const auth = useAuth();
-  const fetcherInit: RequestInit = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${auth.token}`,
-    },
-  };
-  const { data, error, isLoading, isValidating } = useSWR(
-    id ? [`${API_BASE_URL}/user/${id}`, fetcherInit] : null,
-    ([url, init]) => fetcher(url, init)
-  );
-
-  // console.log(data, 'getUser');
-
-  // const users: UserList = React.useMemo(
-  //   () =>
-  //     data?.data.sort((a: { id: number }, b: { id: number }) => a.id - b.id) ||
-  //     [],
-  //   [data]
-  // );
-
-  // const newData = {
-  //   ...data,
-  //   data: users,
-  // };
+const useUserId = (id: string) => {
+  const userId = parseInt(id);
+  const { data, error, isLoading, isValidating } = useSWR<
+    APIResponse<UserDetail>,
+    Error
+  >(id ? `/user/$[id]` : null, () => userApi.getUserById(userId));
 
   return {
     user: data,
