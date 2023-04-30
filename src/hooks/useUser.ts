@@ -1,31 +1,15 @@
 import useSWR from 'swr';
 
-import * as React from 'react';
-
-import { useAuth } from '@/context/auth';
-import { API_BASE_URL } from '@/libs/api';
-import fetcher from '@/libs/fetcher';
+import userApi, { APIResponse } from '@/apis/userApi';
 import { UserList } from '@/types';
 
 const useUser = () => {
-  const auth = useAuth();
-  const fetcherInit: RequestInit = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${auth.token}`,
-    },
-  };
-  const { data, error, isLoading, mutate, isValidating } = useSWR(
-    [`${API_BASE_URL}/user`, fetcherInit],
-    ([url, init]) => fetcher(url, init)
-  );
+  const { data, error, isLoading, mutate, isValidating } = useSWR<
+    APIResponse<UserList>,
+    Error
+  >('/user', () => userApi.getAllUser());
 
-  const users: UserList = React.useMemo(
-    () =>
-      data?.data.sort((a: { id: number }, b: { id: number }) => a.id - b.id) ||
-      [],
-    [data]
-  );
+  const users = data?.data?.sort((a, b) => a.id - b.id) || [];
 
   const newData = {
     ...data,

@@ -3,15 +3,7 @@ import { Link } from 'react-router-dom';
 import { ViewIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 
-import { useAuth } from '@/context/auth';
-import { prefetchUserId } from '@/hooks/useUserId';
-
 const ViewUserDetailButton = ({ id }: { id: string }) => {
-  const auth = useAuth();
-  const handleMouseEnter = () => {
-    prefetchUserId(id, auth.token);
-  };
-
   if (id === undefined) {
     return (
       <IconButton
@@ -24,7 +16,7 @@ const ViewUserDetailButton = ({ id }: { id: string }) => {
     );
   }
   return (
-    <Link to={`/user/${id}`} onMouseEnter={handleMouseEnter}>
+    <Link to={`/user/${id}`}>
       <IconButton
         variant={'outline'}
         icon={<ViewIcon />}

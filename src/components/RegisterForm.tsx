@@ -1,5 +1,3 @@
-import PasswordInput from './PasswordInput';
-
 import * as React from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Link as NavLink, useNavigate } from 'react-router-dom';
@@ -8,8 +6,9 @@ import { Box, Button, Heading, Link, Text, useToast } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import CustomInput from '@/components/CustomInput';
+import PasswordInput from '@/components/PasswordInput';
 
-import { register as registerUser } from '@/libs/api';
+import authApi from '@/apis/authApi';
 import { UserRegister } from '@/types';
 import { isEmpty } from '@/utils';
 import { userRegistrationSchema } from '@/validation/schema';
@@ -30,26 +29,26 @@ const RegisterForm = () => {
     password,
   }) => {
     setIsLoading(true);
-    const { isOk, error } = await registerUser({ name, email, password });
+    const { success, error } = await authApi.register({
+      name,
+      email,
+      password,
+    });
 
-    if (isOk) {
+    if (success) {
       toast({
         title: 'Account created.',
         description: "We've created your account for you.",
         status: 'success',
-        duration: 3000,
-        isClosable: true,
       });
       navigate('/login');
     }
 
-    if (!isOk) {
+    if (!success) {
       toast({
         title: 'An error occurred. Please try again later.',
         description: error || 'Unable to create your account.',
         status: 'error',
-        duration: 3000,
-        isClosable: true,
       });
     }
 

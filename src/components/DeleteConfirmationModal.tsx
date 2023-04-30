@@ -12,9 +12,8 @@ import {
   useToast,
 } from '@chakra-ui/react';
 
-import { useAuth } from '@/context/auth';
+import userApi from '@/apis/userApi';
 import useUser from '@/hooks/useUser';
-import { deleteUser } from '@/libs/api';
 import { UserDetail } from '@/types';
 
 type DeleteConfirmationModalProps = {
@@ -26,7 +25,6 @@ const DeleteConfirmationModal = ({
   id,
   children,
 }: DeleteConfirmationModalProps) => {
-  const auth = useAuth();
   const toast = useToast();
   const { mutateUser, users } = useUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,26 +33,22 @@ const DeleteConfirmationModal = ({
 
   const handleDelete = async () => {
     setIsLoading(true);
-    const { isOk, error } = await deleteUser(id, auth.token);
+    const { success, error } = await userApi.deleteUser(id);
 
-    if (isOk) {
+    if (success) {
       const newUsers = users.data.filter((user: UserDetail) => user.id !== id);
-      mutateUser({ ...users, data: newUsers });
+      await mutateUser({ ...users, data: newUsers, success: true });
       toast({
         title: 'User deleted.',
         status: 'success',
-        duration: 3000,
-        isClosable: true,
       });
     }
 
-    if (!isOk) {
+    if (!success) {
       toast({
         title: 'An error occurred. Please try again later.',
         description: error,
         status: 'error',
-        duration: 3000,
-        isClosable: true,
       });
     }
     onClose();

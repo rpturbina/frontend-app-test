@@ -16,112 +16,69 @@ import CustomModal from '@/components/CustomModal';
 import CustomRadioGroup from '@/components/CustomRadioGroup';
 import DateInput from '@/components/DateInput';
 
-import { useAuth } from '@/context/auth';
+import userApi from '@/apis/userApi';
 import useUser from '@/hooks/useUser';
-import { createUser, updateUser } from '@/libs/api';
-import { UserCreate, UserDetail, UserUpdate } from '@/types';
-import { formatDateToDateAndTimeGMT7 } from '@/utils';
-import { userCreateSchema, userUpdateSchema } from '@/validation/schema';
+import { UserDetail, UserUpdate } from '@/types';
+import { userUpdateSchema } from '@/validation/schema';
 
-type UserFormModalProps = {
+type EditUserFormModalProps = {
   children: (onOpen: () => void) => React.ReactNode;
-  initialValues?: UserUpdate;
-  isEditing?: boolean;
+  initialValues: UserUpdate;
 };
 
-const UserFormModal = ({
-  children,
-  initialValues,
-  isEditing = false,
-}: UserFormModalProps) => {
-  const auth = useAuth();
+const UserFormModal = ({ children, initialValues }: EditUserFormModalProps) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = React.useState(false);
   const { mutateUser, users } = useUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const methods = useForm<UserCreate>({
+  const methods = useForm<UserUpdate>({
     mode: 'onTouched',
-    resolver: yupResolver(isEditing ? userUpdateSchema : userCreateSchema),
-    defaultValues: isEditing ? initialValues : {},
+    resolver: yupResolver(userUpdateSchema),
+    defaultValues: initialValues,
   });
 
   const initialRef = React.useRef<HTMLInputElement | null>(null);
   const finalRef = React.useRef(null);
 
-  const onAddSubmit: SubmitHandler<UserCreate> = async (data) => {
-    const newUser = {
-      ...data,
-      created_at: formatDateToDateAndTimeGMT7(new Date().toISOString()),
-    };
-    setIsLoading(true);
-    const {
-      isOk,
-      error,
-      data: createdUser,
-    } = await createUser(newUser, auth.token);
-
-    if (isOk && createdUser !== null) {
-      mutateUser({ ...users, data: [...users.data, createdUser.data] });
-      toast({
-        title: 'User created successfully.',
-        description: 'Yuhu you created a new user.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      onClose();
-    }
-
-    if (!isOk) {
-      toast({
-        title: 'An error occurred. Please try again later.',
-        description: error,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-    setIsLoading(false);
-  };
-
   React.useEffect(() => {
     if (methods.formState.isSubmitSuccessful) methods.reset(initialValues);
   }, [methods.formState.isSubmitSuccessful]);
 
-  const onEditSubmit: SubmitHandler<UserUpdate> = async (data) => {
+  const onSubmit: SubmitHandler<UserUpdate> = async (data) => {
+    if (initialValues === undefined) return;
+    const newUserUpdate = {
+      ...data,
+      id: initialValues.id,
+    };
     setIsLoading(true);
     const {
-      isOk,
+      success,
       error,
       data: updatedUser,
-    } = await updateUser(data, auth.token);
+    } = await userApi.updateUser(newUserUpdate);
 
-    if (isOk && updatedUser !== null && initialValues !== undefined) {
+    if (success && updatedUser !== null && initialValues !== undefined) {
       const newUsers = users.data.map((user: UserDetail) => {
         if (user.id === initialValues.id) {
-          return updatedUser.data;
+          return updatedUser;
         }
         return user;
       });
-      mutateUser({ ...users, data: newUsers });
+      await mutateUser({ ...users, data: newUsers, success: true });
       toast({
         title: 'User updated successfully.',
-        description: `Yuhu you updated ${updatedUser.data.name}.`,
+        description: `Yuhu you updated ${updatedUser.name}.`,
         status: 'success',
-        duration: 3000,
-        isClosable: true,
       });
       onClose();
     }
 
-    if (!isOk) {
+    if (!success) {
       toast({
         title: 'An error occurred. Please try again later.',
         description: error,
         status: 'error',
-        duration: 3000,
-        isClosable: true,
       });
     }
     setIsLoading(false);
@@ -131,25 +88,24 @@ const UserFormModal = ({
     <CustomModal
       openTrigger={(onOpen) => children(onOpen)}
       initialRef={initialRef}
-      onClose={onClose}
+      onClose={() => {
+        onClose();
+        methods.reset();
+      }}
       onOpen={onOpen}
       isOpen={isOpen}
       finalRef={finalRef}
     >
-      <ModalHeader>{isEditing ? 'Edit user' : 'Tambahkan user'}</ModalHeader>
+      <ModalHeader>Edit user</ModalHeader>
       <FormProvider {...methods}>
-        <form
-          onSubmit={methods.handleSubmit(
-            isEditing ? onEditSubmit : onAddSubmit
-          )}
-        >
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
           <ModalBody pb={6}>
             <CustomInput id="name" label="Nama" placeholder="Nama" />
             <CustomInput id="address" label="Alamat" placeholder="Alamat" />
             <CustomRadioGroup
               id="gender"
               label="L/P"
-              defaultValue={isEditing ? methods.getValues('gender') : 'l'}
+              defaultValue={methods.getValues('gender')}
               options={[
                 { value: 'l', label: 'Laki-laki' },
                 { value: 'p', label: 'Perempuan' },
@@ -178,7 +134,10 @@ const UserFormModal = ({
             </Button>
             <Button
               isDisabled={isLoading}
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                methods.reset();
+              }}
               _hover={{
                 transform: 'translateY(-2px)',
                 boxShadow: 'lg',

@@ -30,7 +30,9 @@ export const userLoginSchema: yup.ObjectSchema<UserLogin> = yup.object({
     .min(8, 'Password minimal 8 karakter'),
 });
 
-export const userCreateSchema: yup.ObjectSchema<UserCreate> = yup.object({
+export const userCreateSchema: yup.ObjectSchema<
+  Omit<UserCreate, 'created_at'>
+> = yup.object({
   name: yup
     .string()
     .required('Nama harus diisi')
@@ -50,8 +52,7 @@ export const userCreateSchema: yup.ObjectSchema<UserCreate> = yup.object({
     )
     .matches(/^\d{4}-\d{2}-\d{2}$/, 'Format tanggal harus dalam "YYYY-MM-DD"'),
   address: yup.string().required('Alamat harus diisi'),
-  id: yup.number().optional(),
-  created_at: yup.string().optional(),
 });
 
-export const userUpdateSchema: yup.ObjectSchema<UserUpdate> = userCreateSchema;
+export const userUpdateSchema: yup.ObjectSchema<Omit<UserUpdate, 'id'>> =
+  userCreateSchema;

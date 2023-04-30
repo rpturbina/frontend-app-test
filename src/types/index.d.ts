@@ -1,30 +1,14 @@
+export type Gender = 'l' | 'p';
+
 export interface User {
   id: number;
   name: string;
   email: string;
   password: string;
   address: string;
-  gender: 'l' | 'p';
+  gender: Gender;
   born_date: Date | string;
   created_at: string;
-}
-
-export interface UserDetailDTO {
-  address: string;
-  born_date: string;
-  created_at: string;
-  file: string;
-  gender: 'l' | 'p';
-  id: number;
-  name: string;
-  photo: string;
-  user_id: number;
-  user_name: string;
-}
-
-export interface UserCreate extends Omit<User, 'email' | 'password'> {
-  id?: number;
-  created_at?: string;
 }
 
 export type UserDetail = Omit<User, 'email' | 'password'>;
@@ -33,9 +17,12 @@ export type UserList = UserDetail[];
 
 export type UserLogin = Pick<User, 'email' | 'password'>;
 
-export interface UserRegister
-  extends Pick<User, 'name' | 'email' | 'password'> {
-  confirmPassword?: string;
-}
+export type UserCreate = Omit<User, 'email' | 'password' | 'id'> & {
+  created_at?: string;
+};
 
-export type UserUpdate = UserCreate;
+export type UserRegister = Pick<User, 'name' | 'email' | 'password'> & {
+  confirmPassword?: string;
+};
+
+export type UserUpdate = Omit<User, 'email' | 'password' | 'created_at'>;

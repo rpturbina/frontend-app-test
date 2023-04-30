@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 
 import DeleteConfirmationModal from '@/components/DeleteConfirmationModal';
-import UserFormModal from '@/components/UserFormModal';
+import EditUserFormModal from '@/components/EditUserFormModal';
 import UserTableEmpty from '@/components/UserTableEmpty';
 import ViewUserDetailButton from '@/components/ViewUserDetailButton';
 
@@ -52,8 +52,7 @@ const UserTable = ({ users }: { users: UserList }) => {
               <Td>
                 <Flex columnGap={4}>
                   <ViewUserDetailButton id={`${user.id}`} />
-                  <UserFormModal
-                    isEditing
+                  <EditUserFormModal
                     initialValues={{
                       ...user,
                     }}
@@ -71,7 +70,7 @@ const UserTable = ({ users }: { users: UserList }) => {
                         onClick={onOpen}
                       />
                     )}
-                  </UserFormModal>
+                  </EditUserFormModal>
                   <DeleteConfirmationModal id={user.id}>
                     {(onOpen) => (
                       <IconButton
