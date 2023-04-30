@@ -8,10 +8,13 @@ import UserDetailCard from '@/components/UserDetailCard';
 import UserDetailCardSkeleton from '@/components/UserDetailCardSkeleton';
 
 import useUserId from '@/hooks/useUserId';
+import { UserDetail } from '@/types';
 
 const UserDetailPage = () => {
   const { id } = useParams();
-  const { user, isLoading } = useUserId(id);
+  const { user, isLoading } = useUserId(id || '');
+
+  const userData = user?.data as UserDetail;
 
   return (
     <Layout>
@@ -25,10 +28,10 @@ const UserDetailPage = () => {
         minH={'100vh'}
         direction={'column'}
       >
-        {isLoading ? (
+        {isLoading || !user ? (
           <UserDetailCardSkeleton />
         ) : (
-          <UserDetailCard user={user?.data} />
+          <UserDetailCard user={userData} />
         )}
         <Link to={'/dashboard'}>
           <Button

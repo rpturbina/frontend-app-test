@@ -2,7 +2,7 @@ import { BsGenderFemale, BsGenderMale } from 'react-icons/bs';
 import { FaBirthdayCake } from 'react-icons/fa';
 import { MdLocationOn } from 'react-icons/md';
 
-import { Box, Flex, Icon, Image, chakra } from '@chakra-ui/react';
+import { Box, Flex, Icon, Image, Skeleton, chakra } from '@chakra-ui/react';
 
 import { UserDetail } from '@/types';
 import { formatDateToIDLocaleString } from '@/utils';
@@ -28,6 +28,7 @@ const UserDetailCard = ({ user }: { user: UserDetail }) => {
         objectPosition="center"
         src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80"
         alt="avatar"
+        fallback={<Skeleton w={'full'} h={56} />}
       />
 
       <Box pt={4} pb={6} px={6}>

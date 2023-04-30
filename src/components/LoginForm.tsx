@@ -8,8 +8,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import CustomInput from '@/components/CustomInput';
 import PasswordInput from '@/components/PasswordInput';
 
+import authApi from '@/apis/authApi';
 import { useAuth } from '@/context/auth';
-import { login } from '@/libs/api';
 import { UserLogin } from '@/types';
 import { isEmpty } from '@/utils';
 import { userLoginSchema } from '@/validation/schema';
@@ -26,10 +26,10 @@ const LoginForm = () => {
 
   const onSubmit: SubmitHandler<UserLogin> = async ({ email, password }) => {
     setIsLoading(true);
-    const { isOk, data, error } = await login({ email, password });
+    const { success, data, error } = await authApi.login({ email, password });
 
-    if (isOk && data !== null) {
-      auth.login(data?.token);
+    if (success && data !== null) {
+      auth.login(data.token);
       toast({
         title: 'Login success.',
         description: "Yuhu you're logged in.",
@@ -40,10 +40,10 @@ const LoginForm = () => {
       navigate('/dashboard');
     }
 
-    if (!isOk) {
+    if (!success) {
       toast({
-        title: 'An error occurred. Please try again later.',
-        description: error,
+        title: 'Login failed.',
+        description: error || 'Something went wrong.',
         status: 'error',
         duration: 3000,
         isClosable: true,
