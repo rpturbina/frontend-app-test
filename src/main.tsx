@@ -17,6 +17,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           toastOptions={{
             defaultOptions: {
               position: 'bottom',
+              duration: 3000,
+              isClosable: true,
             },
           }}
         >

@@ -70,8 +70,6 @@ const UserFormModal = ({ children, initialValues }: EditUserFormModalProps) => {
         title: 'User updated successfully.',
         description: `Yuhu you updated ${updatedUser.name}.`,
         status: 'success',
-        duration: 3000,
-        isClosable: true,
       });
       onClose();
     }
@@ -81,8 +79,6 @@ const UserFormModal = ({ children, initialValues }: EditUserFormModalProps) => {
         title: 'An error occurred. Please try again later.',
         description: error,
         status: 'error',
-        duration: 3000,
-        isClosable: true,
       });
     }
     setIsLoading(false);

@@ -41,8 +41,6 @@ const DeleteConfirmationModal = ({
       toast({
         title: 'User deleted.',
         status: 'success',
-        duration: 3000,
-        isClosable: true,
       });
     }
 
@@ -51,8 +49,6 @@ const DeleteConfirmationModal = ({
         title: 'An error occurred. Please try again later.',
         description: error,
         status: 'error',
-        duration: 3000,
-        isClosable: true,
       });
     }
     onClose();

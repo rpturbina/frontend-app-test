@@ -40,8 +40,6 @@ const RegisterForm = () => {
         title: 'Account created.',
         description: "We've created your account for you.",
         status: 'success',
-        duration: 3000,
-        isClosable: true,
       });
       navigate('/login');
     }
@@ -51,8 +49,6 @@ const RegisterForm = () => {
         title: 'An error occurred. Please try again later.',
         description: error || 'Unable to create your account.',
         status: 'error',
-        duration: 3000,
-        isClosable: true,
       });
     }
 

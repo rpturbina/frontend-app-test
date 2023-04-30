@@ -34,8 +34,6 @@ const LoginForm = () => {
         title: 'Login success.',
         description: "Yuhu you're logged in.",
         status: 'success',
-        duration: 3000,
-        isClosable: true,
       });
       navigate('/dashboard');
     }
@@ -45,8 +43,6 @@ const LoginForm = () => {
         title: 'Login failed.',
         description: error || 'Something went wrong.',
         status: 'error',
-        duration: 3000,
-        isClosable: true,
       });
     }
 
