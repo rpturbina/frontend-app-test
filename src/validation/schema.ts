@@ -1,7 +1,5 @@
 import * as yup from 'yup';
 
-import { UserCreate, UserLogin, UserRegister, UserUpdate } from '@/types';
-
 export const userRegistrationSchema: yup.ObjectSchema<UserRegister> =
   yup.object({
     name: yup

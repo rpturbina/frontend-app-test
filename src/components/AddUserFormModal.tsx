@@ -18,7 +18,6 @@ import DateInput from '@/components/DateInput';
 
 import userApi from '@/apis/userApi';
 import useUser from '@/hooks/useUser';
-import { UserCreate } from '@/types';
 import { formatDateToDateAndTimeGMT7 } from '@/utils';
 import { userCreateSchema } from '@/validation/schema';
 

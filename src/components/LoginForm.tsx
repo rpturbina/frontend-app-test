@@ -10,7 +10,6 @@ import PasswordInput from '@/components/PasswordInput';
 
 import authApi from '@/apis/authApi';
 import { useAuth } from '@/context/auth';
-import { UserLogin } from '@/types';
 import { isEmpty } from '@/utils';
 import { userLoginSchema } from '@/validation/schema';
 
