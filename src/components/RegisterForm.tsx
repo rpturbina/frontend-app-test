@@ -9,7 +9,6 @@ import CustomInput from '@/components/CustomInput';
 import PasswordInput from '@/components/PasswordInput';
 
 import authApi from '@/apis/authApi';
-import { UserRegister } from '@/types';
 import { isEmpty } from '@/utils';
 import { userRegistrationSchema } from '@/validation/schema';
 

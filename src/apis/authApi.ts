@@ -1,5 +1,4 @@
 import { fetchBase } from '@/apis/apiBase';
-import { UserLogin, UserRegister } from '@/types';
 
 interface LoginDTO {
   token: string;

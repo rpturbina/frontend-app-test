@@ -1,5 +1,4 @@
 import { fetchWithAuth } from '@/apis/apiBase';
-import { UserCreate, UserDetail, UserList, UserUpdate } from '@/types';
 
 export interface UserDTO {
   address: string;

@@ -1,6 +1,6 @@
-export type Gender = 'l' | 'p';
+type Gender = 'l' | 'p';
 
-export interface User {
+interface User {
   id: number;
   name: string;
   email: string;
@@ -11,18 +11,18 @@ export interface User {
   created_at: string;
 }
 
-export type UserDetail = Omit<User, 'email' | 'password'>;
+type UserDetail = Omit<User, 'email' | 'password'>;
 
-export type UserList = UserDetail[];
+type UserList = UserDetail[];
 
-export type UserLogin = Pick<User, 'email' | 'password'>;
+type UserLogin = Pick<User, 'email' | 'password'>;
 
-export type UserCreate = Omit<User, 'email' | 'password' | 'id'> & {
+type UserCreate = Omit<User, 'email' | 'password' | 'id'> & {
   created_at?: string;
 };
 
-export type UserRegister = Pick<User, 'name' | 'email' | 'password'> & {
+type UserRegister = Pick<User, 'name' | 'email' | 'password'> & {
   confirmPassword?: string;
 };
 
-export type UserUpdate = Omit<User, 'email' | 'password' | 'created_at'>;
+type UserUpdate = Omit<User, 'email' | 'password' | 'created_at'>;

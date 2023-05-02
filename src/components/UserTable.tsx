@@ -18,7 +18,6 @@ import EditUserFormModal from '@/components/EditUserFormModal';
 import UserTableEmpty from '@/components/UserTableEmpty';
 import ViewUserDetailButton from '@/components/ViewUserDetailButton';
 
-import { UserList } from '@/types';
 import {
   formatDateToDateAndTimeGMT7,
   formatDateToIDLocaleString,

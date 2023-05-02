@@ -14,7 +14,6 @@ import {
 
 import userApi from '@/apis/userApi';
 import useUser from '@/hooks/useUser';
-import { UserDetail } from '@/types';
 
 type DeleteConfirmationModalProps = {
   id: number;
