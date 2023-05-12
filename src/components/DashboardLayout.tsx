@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Box, Container } from '@chakra-ui/react';
 
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+const DashboardLayout = ({ children }: React.PropsWithChildren) => {
   return (
     <>
       <Container as={'section'} mx={'auto'} maxW={'1100px'}>

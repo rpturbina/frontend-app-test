@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Container, Flex } from '@chakra-ui/react';
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = ({ children }: React.PropsWithChildren) => {
   return (
     <Container as={'section'} mx={'auto'} maxW={'1100px'}>
       <Flex minH={'100vh'} align={'center'} justify={'center'}>
