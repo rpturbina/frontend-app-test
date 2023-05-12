@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 
 import userApi, { APIResponse } from '@/apis/userApi';
-import { UserList } from '@/types';
 
 const useUser = () => {
   const { data, error, isLoading, mutate, isValidating } = useSWR<

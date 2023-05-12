@@ -4,7 +4,6 @@ import { MdLocationOn } from 'react-icons/md';
 
 import { Box, Flex, Icon, Image, Skeleton, chakra } from '@chakra-ui/react';
 
-import { UserDetail } from '@/types';
 import { formatDateToIDLocaleString } from '@/utils';
 
 const UserDetailCard = ({ user }: { user: UserDetail }) => {

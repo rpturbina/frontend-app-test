@@ -18,7 +18,6 @@ import DateInput from '@/components/DateInput';
 
 import userApi from '@/apis/userApi';
 import useUser from '@/hooks/useUser';
-import { UserDetail, UserUpdate } from '@/types';
 import { userUpdateSchema } from '@/validation/schema';
 
 type EditUserFormModalProps = {

@@ -8,7 +8,6 @@ import UserDetailCard from '@/components/UserDetailCard';
 import UserDetailCardSkeleton from '@/components/UserDetailCardSkeleton';
 
 import useUserId from '@/hooks/useUserId';
-import { UserDetail } from '@/types';
 
 const UserDetailPage = () => {
   const { id } = useParams();
